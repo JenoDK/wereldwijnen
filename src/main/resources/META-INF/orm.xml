@@ -4,4 +4,14 @@
 	xsi:schemaLocation="http://xmlns.jcp.org/xml/ns/persistence/orm
 http://xmlns.jcp.org/xml/ns/persistence/orm_2_1.xsd"
 	version="2.1">
+	<named-query name='Land.findAll'>
+		<query>
+			select c from Land c order by c.id
+		</query>
+	</named-query>
+	<named-query name='Soort.findByLandid'>
+		<query>
+			select c FROM Soort c WHERE c.land.id = :landid
+		</query>
+	</named-query>
 </entity-mappings>
