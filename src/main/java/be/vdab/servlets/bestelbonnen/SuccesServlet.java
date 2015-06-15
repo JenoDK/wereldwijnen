@@ -7,6 +7,7 @@ import javax.servlet.annotation.WebServlet;
 import javax.servlet.http.HttpServlet;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
+import javax.servlet.http.HttpSession;
 
 @WebServlet("/bestelbonnen/succes.htm")
 public class SuccesServlet extends HttpServlet {
@@ -18,6 +19,8 @@ public class SuccesServlet extends HttpServlet {
 		if (request.getQueryString() != null) {
 			request.setAttribute("bestelbonId", Long.parseLong(request.getParameter("id")));
 		}
+		HttpSession session = request.getSession();
+		session.removeAttribute("mandje");
 		request.getRequestDispatcher(VIEW).forward(request, response);
 	}
 

@@ -84,7 +84,6 @@ public class ToevoegenServlet extends HttpServlet {
 					}
 				}
 			}
-			session.removeAttribute("mandje");
 			bestelbonService.create(bestelbon, bestelbonLijnen);
 			response.sendRedirect(response.encodeRedirectURL(String.format(
 					REDIRECT_URL, request.getContextPath(), bestelbon.getId())));
