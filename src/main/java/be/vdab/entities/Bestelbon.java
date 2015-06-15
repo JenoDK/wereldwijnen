@@ -1,15 +1,22 @@
 package be.vdab.entities;
 
 import java.io.Serializable;
-import java.sql.Date;
+import java.util.Date;
+import java.util.Collections;
+import java.util.LinkedHashSet;
+import java.util.Set;
 
+import javax.persistence.CollectionTable;
+import javax.persistence.ElementCollection;
 import javax.persistence.Embedded;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
+import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
 import be.vdab.valueobjects.Adres;
+import be.vdab.valueobjects.BestelbonLijn;
 
 @Entity
 @Table(name = "bestelbonnen")
@@ -24,15 +31,31 @@ public class Bestelbon implements Serializable {
 	@Embedded
 	private Adres adres;
 	private int bestelwijze;
+	@ElementCollection
+	@CollectionTable(name = "bestelbonlijnen", joinColumns = @JoinColumn(name = "bonid"))
+	private Set<BestelbonLijn> bestelbonLijnen;
 
 	public Bestelbon(Date besteld, String naam, Adres adres, int bestelwijze) {
 		this.besteld = besteld;
 		this.naam = naam;
 		this.adres = adres;
 		this.bestelwijze = bestelwijze;
+		bestelbonLijnen = new LinkedHashSet<>();
+	}
+	
+	public Bestelbon() {
 	}
 
-	public Bestelbon() {
+	public Set<BestelbonLijn> getBestelbonLijnen() {
+		return Collections.unmodifiableSet(bestelbonLijnen);
+	}
+
+	public void addBestelbonLijn(BestelbonLijn bestelbonLijn) {
+		bestelbonLijnen.add(bestelbonLijn);
+	}
+
+	public void removeBestelbonLijn(BestelbonLijn bestelbonLijn) {
+		bestelbonLijnen.remove(bestelbonLijn);
 	}
 
 	public long getId() {
@@ -71,14 +94,19 @@ public class Bestelbon implements Serializable {
 		this.bestelwijze = bestelwijze;
 	}
 
+	public static boolean isStringValid(String string) {
+		return string != null && !string.isEmpty();
+	}
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + ((adres == null) ? 0 : adres.hashCode());
+		result = prime * result
+				+ ((bestelbonLijnen == null) ? 0 : bestelbonLijnen.hashCode());
 		result = prime * result + ((besteld == null) ? 0 : besteld.hashCode());
 		result = prime * result + bestelwijze;
-		result = prime * result + (int) (id ^ (id >>> 32));
 		result = prime * result + ((naam == null) ? 0 : naam.hashCode());
 		return result;
 	}
@@ -97,14 +125,17 @@ public class Bestelbon implements Serializable {
 				return false;
 		} else if (!adres.equals(other.adres))
 			return false;
+		if (bestelbonLijnen == null) {
+			if (other.bestelbonLijnen != null)
+				return false;
+		} else if (!bestelbonLijnen.equals(other.bestelbonLijnen))
+			return false;
 		if (besteld == null) {
 			if (other.besteld != null)
 				return false;
 		} else if (!besteld.equals(other.besteld))
 			return false;
 		if (bestelwijze != other.bestelwijze)
-			return false;
-		if (id != other.id)
 			return false;
 		if (naam == null) {
 			if (other.naam != null)
@@ -114,6 +145,26 @@ public class Bestelbon implements Serializable {
 		return true;
 	}
 	
-	
+	private String bestelwijzeToString(){
+		if (this.bestelwijze == 0){
+			return "Afhalen";
+		}else {
+			return "Leveren";
+		}
+	}
 
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder(500);
+		sb.append("Bestelbon id= " + id + ", ");
+		sb.append("besteld= " + besteld + ", ");
+		sb.append("naam= "+ naam + ", ");
+		sb.append("adres= " + adres + ", ");
+		sb.append("bestelwijze=" + bestelwijzeToString());
+		for (BestelbonLijn a : bestelbonLijnen){
+			sb.append(", Bestelbonlijn= " + a);
+		}
+		return sb.toString();
+	}
+	
 }

@@ -11,7 +11,19 @@ http://xmlns.jcp.org/xml/ns/persistence/orm_2_1.xsd"
 	</named-query>
 	<named-query name='Soort.findByLandid'>
 		<query>
-			select c FROM Soort c WHERE c.land.id = :landid
+			select c FROM Soort c WHERE c.land.id = :landid ORDER BY c.naam
+		</query>
+	</named-query>
+	<named-query name='Wijn.findBySoortid'>
+		<query>
+			select c FROM Wijn c WHERE c.soort.id = :soortid ORDER BY c.jaar
+		</query>
+	</named-query>
+	<named-query name='Wijn.verhoogInBestelling'>
+		<query>
+			update Wijn d
+			set d.inBestelling = d.inBestelling + :factor
+			WHERE d.id = :wijnid
 		</query>
 	</named-query>
 </entity-mappings>

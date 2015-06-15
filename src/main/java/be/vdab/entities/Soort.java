@@ -1,8 +1,6 @@
 package be.vdab.entities;
 
 import java.io.Serializable;
-import java.util.Collections;
-import java.util.Set;
 
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
@@ -10,7 +8,6 @@ import javax.persistence.GeneratedValue;
 import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
-import javax.persistence.OneToMany;
 import javax.persistence.Table;
 
 @Entity
@@ -25,8 +22,6 @@ public class Soort implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "landid")
 	private Land land;
-	@OneToMany(mappedBy = "soort")
-	private Set<Wijn> wijnen;
 
 	public long getId() {
 		return id;
@@ -38,10 +33,6 @@ public class Soort implements Serializable {
 
 	public Land getLand() {
 		return land;
-	}
-
-	public Set<Wijn> getWijnen() {
-		return Collections.unmodifiableSet(wijnen);
 	}
 
 	@Override
@@ -75,4 +66,9 @@ public class Soort implements Serializable {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return "Soort: " + naam + ", land: " + land;
+	}
+	
 }

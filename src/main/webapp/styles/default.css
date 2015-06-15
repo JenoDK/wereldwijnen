@@ -1,6 +1,9 @@
 body {
 	background-color: #FFEC9F;
 	font-family: sans-serif;
+	min-width: 780px;
+	max-width: 1260px;
+	margin: 10px auto;
 }
 
 nav {
@@ -13,7 +16,7 @@ nav  a:hover {
 	text-decoration: none;
 }
 
-nav ul,nav ul li ul {
+nav ul, nav ul li ul {
 	list-style: none;
 	margin: 0;
 	padding: 0;
@@ -25,7 +28,7 @@ nav>ul>li {
 	position: relative;
 }
 
-nav ul li a,nav ul li:hover ul {
+nav ul li a, nav ul li:hover ul {
 	display: block;
 }
 
@@ -42,7 +45,7 @@ nav ul li:hover {
 	background-color: #E8E8E8;
 }
 
-nav>ul>li>a,nav ul li ul li a {
+nav>ul>li>a, nav ul li ul li a {
 	color: black;
 	line-height: 1.8em;
 	padding: 0 0.5em;
@@ -53,12 +56,12 @@ h1 {
 	clear: both;
 }
 
-table,th,td {
+table, th, td {
 	border: 1px solid silver;
 	border-collapse: collapse;
 }
 
-thead tr,tfoot tr {
+thead tr, tfoot tr {
 	color: white;
 	background-color: gray;
 }
@@ -84,18 +87,35 @@ label {
 	cursor: pointer;
 }
 
-input,select {
-	display: block;
-	font-size: 1.1em;
-	margin-bottom: 1em;
-	margin-top: 0.2em;
+caption {
+	display: table-caption;
+	text-align: right;
+	caption-side: bottom;
 }
 
-input:focus,textarea:focus,select:focus {
+input, select {
+	display: block; font-size : 1.1em;
+	margin-bottom: 1em;
+	margin-top: 0.2em;
+	font-size: 1.1em;
+}
+
+input[type="text"] {
+	display: block;
+	margin: 20px 0;
+	width: 300px;
+	font-family: sans-serif;
+	font-size: 18px;
+	appearance: none;
+	box-shadow: none;
+	border-radius: none;
+}
+
+input:focus, textarea:focus, select:focus {
 	background-color: #FFFFD6
 }
 
-input[type='checkbox'],input[type='radio'] {
+input[type='checkbox'], input[type='radio'] {
 	display: inline;
 }
 
@@ -166,5 +186,51 @@ header {
 	text-align: center;
 	background-image: url(../images/intro.jpg);
 	background-repeat: no-repeat;
-	background-position: center; 
+	background-position: center;
+}
+
+#left-sidebar {
+	width: 300px;
+	float: left;
+	padding-right: 10px;
+	/*border-right:1px solid #dc0201;*/
+	text-align: left;
+	border-right: 1px solid black;
+}
+
+#left-sidebar ul {
+	list-style-type: none;
+	padding-left: 0;
+	margin: 0;
+}
+
+#left-sidebar ul li {
+	margin-bottom: 8px;
+	padding-left: 2px;
+}
+
+#left-sidebar ul li:last-child {
+	margin-bottom: 0;
+}
+
+#main-content {
+	padding-left: 325px;
+}
+
+#main-content ul {
+	padding-left: 15px;
+}
+
+/*clearfix hack*/
+.clearFix:before, .clearFix:after {
+	content: " ";
+	display: table;
+}
+
+.clearFix:after {
+	clear: both;
+}
+/* enkel voor IE6/7 */
+.clearFix {
+	*zoom: 1;
 }

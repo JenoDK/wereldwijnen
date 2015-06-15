@@ -7,7 +7,6 @@ import javax.persistence.FetchType;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 
-import be.vdab.entities.Bestelbon;
 import be.vdab.entities.Wijn;
 
 @Embeddable
@@ -17,14 +16,10 @@ public class BestelbonLijn implements Serializable {
 	@ManyToOne(fetch = FetchType.LAZY, optional = false)
 	@JoinColumn(name = "wijnid")
 	private Wijn wijn;
-	@ManyToOne(fetch = FetchType.LAZY, optional = false)
-	@JoinColumn(name = "bonid")
-	private Bestelbon bestelbon;
 	private int aantal;
 
-	public BestelbonLijn(Wijn wijn, Bestelbon bestelbon, int aantal) {
+	public BestelbonLijn(Wijn wijn, int aantal) {
 		this.wijn = wijn;
-		this.bestelbon = bestelbon;
 		this.aantal = aantal;
 	}
 
@@ -35,20 +30,12 @@ public class BestelbonLijn implements Serializable {
 		return wijn;
 	}
 
-	public Bestelbon getBestelbon() {
-		return bestelbon;
-	}
-
 	public int getAantal() {
 		return aantal;
 	}
 
 	public void setWijn(Wijn wijn) {
 		this.wijn = wijn;
-	}
-
-	public void setBestelbon(Bestelbon bestelbon) {
-		this.bestelbon = bestelbon;
 	}
 
 	public void setAantal(int aantal) {
@@ -60,8 +47,6 @@ public class BestelbonLijn implements Serializable {
 		final int prime = 31;
 		int result = 1;
 		result = prime * result + aantal;
-		result = prime * result
-				+ ((bestelbon == null) ? 0 : bestelbon.hashCode());
 		result = prime * result + ((wijn == null) ? 0 : wijn.hashCode());
 		return result;
 	}
@@ -77,11 +62,6 @@ public class BestelbonLijn implements Serializable {
 		BestelbonLijn other = (BestelbonLijn) obj;
 		if (aantal != other.aantal)
 			return false;
-		if (bestelbon == null) {
-			if (other.bestelbon != null)
-				return false;
-		} else if (!bestelbon.equals(other.bestelbon))
-			return false;
 		if (wijn == null) {
 			if (other.wijn != null)
 				return false;
@@ -90,4 +70,9 @@ public class BestelbonLijn implements Serializable {
 		return true;
 	}
 
+	@Override
+	public String toString() {
+		return "BestelbonLijn wijn=" + wijn + ", aantal=" + aantal;
+	}
+	
 }

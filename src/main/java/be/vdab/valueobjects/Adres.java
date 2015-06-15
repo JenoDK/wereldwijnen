@@ -4,6 +4,7 @@ import java.io.Serializable;
 
 import javax.persistence.Embeddable;
 
+
 @Embeddable
 public class Adres implements Serializable {
 	private static final long serialVersionUID = 1L;
@@ -53,7 +54,7 @@ public class Adres implements Serializable {
 	public void setGemeente(String gemeente) {
 		this.gemeente = gemeente;
 	}
-
+	
 	@Override
 	public int hashCode() {
 		final int prime = 31;

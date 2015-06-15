@@ -2,6 +2,7 @@ package be.vdab.entities;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+
 import javax.persistence.Entity;
 import javax.persistence.FetchType;
 import javax.persistence.GeneratedValue;
@@ -9,6 +10,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.ManyToOne;
 import javax.persistence.Table;
+import javax.persistence.Transient;
 
 @Entity
 @Table(name = "wijnen")
@@ -25,6 +27,8 @@ public class Wijn implements Serializable {
 	private int beoordeling;
 	private BigDecimal prijs;
 	private int inBestelling;
+	@Transient
+	private int aantal;
 
 	public Wijn(Soort soort, int jaar, int beoordeling, BigDecimal prijs,
 			int inBestelling) {
@@ -33,6 +37,14 @@ public class Wijn implements Serializable {
 		this.beoordeling = beoordeling;
 		this.prijs = prijs;
 		this.inBestelling = inBestelling;
+	}
+
+	public int getAantal() {
+		return aantal;
+	}
+
+	public void setAantal(int aantal) {
+		this.aantal = aantal;
 	}
 
 	public Wijn() {
@@ -78,10 +90,15 @@ public class Wijn implements Serializable {
 		inBestelling += aantal;
 	}
 
+	public BigDecimal getTotaal() {
+		return prijs.multiply(new BigDecimal(aantal));
+	}
+
 	@Override
 	public int hashCode() {
 		final int prime = 31;
 		int result = 1;
+		result = prime * result + aantal;
 		result = prime * result + beoordeling;
 		result = prime * result + inBestelling;
 		result = prime * result + jaar;
@@ -99,6 +116,8 @@ public class Wijn implements Serializable {
 		if (getClass() != obj.getClass())
 			return false;
 		Wijn other = (Wijn) obj;
+		if (aantal != other.aantal)
+			return false;
 		if (beoordeling != other.beoordeling)
 			return false;
 		if (inBestelling != other.inBestelling)
@@ -117,5 +136,18 @@ public class Wijn implements Serializable {
 			return false;
 		return true;
 	}
+
+	@Override
+	public String toString() {
+		StringBuilder sb = new StringBuilder(100);
+		sb.append("Soort: " + soort + ", ");
+		sb.append("jaar: " + jaar + ", ");
+		sb.append("beoordeling: " + beoordeling + ", ");
+		sb.append("prijs: €" + prijs + ", ");
+		sb.append("aantal in bestelling: " + inBestelling);
+		return sb.toString();
+	}
+	
+	
 
 }
