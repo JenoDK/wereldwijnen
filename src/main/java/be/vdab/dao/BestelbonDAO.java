@@ -1,6 +1,9 @@
 package be.vdab.dao;
 
+import javax.persistence.LockModeType;
+
 import be.vdab.entities.Bestelbon;
+import be.vdab.entities.Wijn;
 
 public class BestelbonDAO extends AbstractDAO {
 
@@ -8,10 +11,10 @@ public class BestelbonDAO extends AbstractDAO {
 		getEntityManager().persist(bestelbon);
 	}
 
-	public void verhoogInBestelling(int factor, long wijnid) {
-		getEntityManager().createNamedQuery("Wijn.verhoogInBestelling")
-				.setParameter("factor", factor).setParameter("wijnid", wijnid)
-				.executeUpdate();
+	//staat hier om dan in bestbonservice alles in 1 commit te doen.
+	public Wijn readWithLock(long id) {
+		return getEntityManager().find(Wijn.class, id,
+				LockModeType.PESSIMISTIC_WRITE);
 	}
 
 }

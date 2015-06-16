@@ -26,18 +26,21 @@ public class IndexServlet extends HttpServlet {
 	protected void doGet(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
 		String landid = request.getParameter("landid");
+		//IF LANDID EXISTS SEND SOORTEN ATTRIBUTE TO JSP
 		if (landid != null && (!landid.isEmpty())) {
 			long landidLong = Long.parseLong(landid);
 			request.setAttribute("soorten",
 					soortService.findAllByLandId(landidLong));
 		}
 		String soortid = request.getParameter("soortid");
+		//IF SOORTID EXISTS SEND WIJNEN ATTRIBUTE TO JSP
 		if (soortid != null && (!soortid.isEmpty())) {
 			long soortidLong = Long.parseLong(soortid);
 			request.setAttribute("wijnen",
 					wijnService.findAllBySoortId(soortidLong));
 		}
 		HttpSession session = request.getSession(false);
+		//SEND MANDJE TO JSP, CHECK ON EMPTY OR NOT WILL HAPPEN IN JSP
 		if (session != null) {
 			@SuppressWarnings("unchecked")
 			Map<Long, Integer> wijnIdsEnAantalInMandje = (Map<Long, Integer>) session

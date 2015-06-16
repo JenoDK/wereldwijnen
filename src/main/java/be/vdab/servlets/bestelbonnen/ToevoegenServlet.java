@@ -3,9 +3,7 @@ package be.vdab.servlets.bestelbonnen;
 import java.io.IOException;
 import java.util.Date;
 import java.util.HashMap;
-import java.util.LinkedHashSet;
 import java.util.Map;
-import java.util.Set;
 
 import javax.servlet.ServletException;
 import javax.servlet.annotation.WebServlet;
@@ -16,6 +14,7 @@ import javax.servlet.http.HttpSession;
 
 import be.vdab.entities.Bestelbon;
 import be.vdab.entities.Wijn;
+import be.vdab.enums.Bestelwijze;
 import be.vdab.services.BestelbonService;
 import be.vdab.services.WijnService;
 import be.vdab.valueobjects.Adres;
@@ -32,6 +31,7 @@ public class ToevoegenServlet extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		//CONTROLE VELDEN
 		Map<String, String> fouten = new HashMap<>();
 		String naam = request.getParameter("naam");
 		if (!Bestelbon.isStringValid(naam)) {
@@ -46,8 +46,9 @@ public class ToevoegenServlet extends HttpServlet {
 			fouten.put("huisnummer", "verplicht");
 		}
 		String postcode = request.getParameter("postcode");
-		if (!Bestelbon.isStringValid(postcode)) {
-			fouten.put("postcode", "verplicht");
+		int postcodeInt = Integer.parseInt(postcode);
+		if (!Bestelbon.isStringValid(postcode) && postcodeInt>=1000 && postcodeInt<=9999) {
+			fouten.put("postcode", "verplicht en tussen 1000 en 9999");
 		}
 		String gemeente = request.getParameter("gemeente");
 		if (!Bestelbon.isStringValid(gemeente)) {
@@ -57,19 +58,15 @@ public class ToevoegenServlet extends HttpServlet {
 		if (bestelwijze == null) {
 			fouten.put("bestelwijze", "verplicht");
 		}
-		int bestelwijzeInt;
-		if (bestelwijze.equals("AFHALEN")) {
-			bestelwijzeInt = 0;
-		} else {
-			bestelwijzeInt = 1;
-		}
+		//EINDE CONTROLE VELDEN
+		//BESTELBON MAKEN EN TOEVOEGEN AAN DATABASE
 		if (fouten.isEmpty()) {
 			Date date = new Date();
 			Adres adres = new Adres(straat, huisnummer, postcode, gemeente);
 			Bestelbon bestelbon = new Bestelbon(date, naam, adres,
-					bestelwijzeInt);
+					Bestelwijze.valueOf(bestelwijze).getBestelWijzeInt());
+					//GET THE VALUE OF THE ACCORDING ENUM CLASS
 			HttpSession session = request.getSession();
-			Set<BestelbonLijn> bestelbonLijnen = new LinkedHashSet<>();
 			if (session != null) {
 				@SuppressWarnings("unchecked")
 				Map<Long, Integer> mandje = (Map<Long, Integer>) session
@@ -80,11 +77,12 @@ public class ToevoegenServlet extends HttpServlet {
 						int aantal = (entry.getValue());
 						BestelbonLijn bestelbonLijn = new BestelbonLijn(a,
 								aantal);
-						bestelbonLijnen.add(bestelbonLijn);
+						bestelbon.addBestelbonLijn(bestelbonLijn);
 					}
 				}
 			}
-			bestelbonService.create(bestelbon, bestelbonLijnen);
+			//IF SUCCES REDIRECT TO SUCCES PAGE WITH BESTELBON ID PARAMETER
+			bestelbonService.create(bestelbon);
 			response.sendRedirect(response.encodeRedirectURL(String.format(
 					REDIRECT_URL, request.getContextPath(), bestelbon.getId())));
 

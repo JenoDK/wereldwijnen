@@ -36,6 +36,7 @@ public class WijnToevoegen extends HttpServlet {
 	@Override
 	protected void doPost(HttpServletRequest request,
 			HttpServletResponse response) throws ServletException, IOException {
+		//GET PARAMETERS HERE SO APP IS ABLE TO SEND THEM WITH BESLISSING REDIRECT IF NECESSARY
 		int aantal = Integer.parseInt(request.getParameter("aantal"));
 		long wijnid = Long.parseLong(request.getParameter("id"));
 		if (request.getParameter("id") != null) {
@@ -49,13 +50,14 @@ public class WijnToevoegen extends HttpServlet {
 						if (wijnIdsEnAantalInMandje == null) {
 							wijnIdsEnAantalInMandje = new HashMap<Long, Integer>();
 						}
+						//CHECK IF WIJN ALLREADY EXISTS IN MANDJE AND CHANGE BOOLEAN SO APP KNOWS WHICH REDIRECT TO TAKE (naar beslissingservlet of niet?)
 						if (wijnIdsEnAantalInMandje.containsKey(wijnid)){
 							REDIRECT = false;
 						}else {
-							wijnIdsEnAantalInMandje.put(wijnid, aantal);	
+							wijnIdsEnAantalInMandje.put(wijnid, aantal);
+							session.setAttribute("mandje", wijnIdsEnAantalInMandje);
 							REDIRECT = true;
 						}
-						session.setAttribute("mandje", wijnIdsEnAantalInMandje);
 					}
 				} else {
 					request.setAttribute("fout",
@@ -73,6 +75,7 @@ public class WijnToevoegen extends HttpServlet {
 			response.sendRedirect(response.encodeRedirectURL(String.format(
 					REDIRECT_SUCCES, request.getContextPath())));
 		}else {
+			//REDIRECT NAAR BESLISSINGSERVLET MET DE PARAMETERS
 			response.sendRedirect(response.encodeRedirectURL(String.format(
 					REDIRECT_IF_WIJN_EXISTS, request.getContextPath(), wijnid, aantal)));
 		}

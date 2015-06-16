@@ -15,6 +15,7 @@ import javax.persistence.Id;
 import javax.persistence.JoinColumn;
 import javax.persistence.Table;
 
+import be.vdab.enums.Bestelwijze;
 import be.vdab.valueobjects.Adres;
 import be.vdab.valueobjects.BestelbonLijn;
 
@@ -30,7 +31,8 @@ public class Bestelbon implements Serializable {
 	private String naam;
 	@Embedded
 	private Adres adres;
-	private int bestelwijze;
+	private int bestelwijze; //GEEN ENUM VARIABLE HIER OMDAT DATABASE EEN INT VRAAGT IN BESTELWIJZE COLUMN, 
+							 //APP GEBRUIKT Bestelwijze ENUM WEL IN DE ToevoegenServlet WAAR HET DAN HET INT ATTRIBUUT VRAAGT VAN DE BIJBEHORENDE ENUM
 	@ElementCollection
 	@CollectionTable(name = "bestelbonlijnen", joinColumns = @JoinColumn(name = "bonid"))
 	private Set<BestelbonLijn> bestelbonLijnen;
@@ -90,8 +92,8 @@ public class Bestelbon implements Serializable {
 		this.adres = adres;
 	}
 
-	public void setBestelwijze(int bestelwijze) {
-		this.bestelwijze = bestelwijze;
+	public void setBestelwijze(Bestelwijze bestelwijze) {
+		this.bestelwijze = bestelwijze.getBestelWijzeInt();
 	}
 
 	public static boolean isStringValid(String string) {

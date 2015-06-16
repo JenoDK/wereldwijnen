@@ -1,7 +1,6 @@
 package be.vdab.services;
 
 import java.util.Iterator;
-import java.util.Set;
 
 import be.vdab.dao.BestelbonDAO;
 import be.vdab.entities.Bestelbon;
@@ -10,15 +9,14 @@ import be.vdab.valueobjects.BestelbonLijn;
 public class BestelbonService {
 	private final BestelbonDAO bestelbonDAO = new BestelbonDAO();
 
-	public void create(Bestelbon bestelbon, Set<BestelbonLijn> bestelbonLijnen) {
+	public void create(Bestelbon bestelbon) {
 		bestelbonDAO.beginTransaction();
-		Iterator<BestelbonLijn> itr = bestelbonLijnen.iterator();
+		Iterator<BestelbonLijn> itr = bestelbon.getBestelbonLijnen().iterator();
 		while(itr.hasNext()){
 			BestelbonLijn bestelbonLijn = itr.next();
-            bestelbon.addBestelbonLijn(bestelbonLijn);
             long wijnid = bestelbonLijn.getWijn().getId();
             int aantal = bestelbonLijn.getAantal();
-            bestelbonDAO.verhoogInBestelling(aantal, wijnid);
+            bestelbonDAO.readWithLock(wijnid).verhoogInBestelling(aantal);
         }
 		bestelbonDAO.create(bestelbon);
 		bestelbonDAO.commit();
