@@ -34,14 +34,6 @@ public class BestelbonLijn implements Serializable {
 		return aantal;
 	}
 
-	public void setWijn(Wijn wijn) {
-		this.wijn = wijn;
-	}
-
-	public void setAantal(int aantal) {
-		this.aantal = aantal;
-	}
-
 	@Override
 	public int hashCode() {
 		final int prime = 31;

@@ -39,22 +39,6 @@ public class Adres implements Serializable {
 		return gemeente;
 	}
 
-	public void setStraat(String straat) {
-		this.straat = straat;
-	}
-
-	public void setHuisNr(String huisNr) {
-		this.huisNr = huisNr;
-	}
-
-	public void setPostcode(String postcode) {
-		this.postcode = postcode;
-	}
-
-	public void setGemeente(String gemeente) {
-		this.gemeente = gemeente;
-	}
-	
 	@Override
 	public int hashCode() {
 		final int prime = 31;
